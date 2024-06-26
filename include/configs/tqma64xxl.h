@@ -71,8 +71,6 @@
 	"args_reset=setenv bootargs ''\0" \
 	"args_extra=true\0" \
 	"run_kern=booti ${loadaddr} ${ramdisk_addr} ${fdt_addr}\0" \
-	"mtdids=" CONFIG_MTDIDS_DEFAULT "\0" \
-	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0" \
 	""
 
 /* U-Boot MMC-specific configuration */
