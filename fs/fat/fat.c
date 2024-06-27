@@ -62,6 +62,7 @@ static int disk_read(__u32 block, __u32 nr_blocks, void *buf)
 
 int fat_set_blk_dev(struct blk_desc *dev_desc, disk_partition_t *info)
 {
+	printf("Bonjour from fat_set_blk_dev\n");
 	ALLOC_CACHE_ALIGN_BUFFER(unsigned char, buffer, dev_desc->blksz);
 
 	cur_dev = dev_desc;
@@ -69,12 +70,14 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, disk_partition_t *info)
 
 	/* Make sure it has a valid FAT header */
 	if (disk_read(0, 1, buffer) != 1) {
+		printf("It is in the disk_read thing\n");
 		cur_dev = NULL;
 		return -1;
 	}
 
 	/* Check if it's actually a DOS volume */
 	if (memcmp(buffer + DOS_BOOT_MAGIC_OFFSET, "\x55\xAA", 2)) {
+		printf("It is in the doss volume thing\n");
 		cur_dev = NULL;
 		return -1;
 	}
