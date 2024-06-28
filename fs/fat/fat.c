@@ -75,13 +75,13 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, struct disk_partition *info)
 	/* Check if it's actually a DOS volume */
 
 	// CHANGING TO DOS HEADER
-	buffer[DOS_BOOT_MAGIC_OFFSET] = '\x55';
-	buffer[DOS_BOOT_MAGIC_OFFSET + 1] = '\xAA';
-	buffer[DOS_FS_TYPE_OFFSET] = 'F';
-	buffer[DOS_FS_TYPE_OFFSET + 1] = 'A';
-	buffer[DOS_FS_TYPE_OFFSET + 2] = 'T';
-	buffer[DOS_FS_TYPE_OFFSET + 3] = '3';
-	buffer[DOS_FS_TYPE_OFFSET + 4] = '2';
+	// buffer[DOS_BOOT_MAGIC_OFFSET] = '\x55';
+	// buffer[DOS_BOOT_MAGIC_OFFSET + 1] = '\xAA';
+	// buffer[DOS_FS_TYPE_OFFSET] = 'F';
+	// buffer[DOS_FS_TYPE_OFFSET + 1] = 'A';
+	// buffer[DOS_FS_TYPE_OFFSET + 2] = 'T';
+	// buffer[DOS_FS_TYPE_OFFSET + 3] = '3';
+	// buffer[DOS_FS_TYPE_OFFSET + 4] = '2';
 
 	if (memcmp(buffer + DOS_BOOT_MAGIC_OFFSET, "\x55\xAA", 2)) {
 		printf("<> We did NOT provide a DOS volume!\n");
