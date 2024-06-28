@@ -77,8 +77,9 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, struct disk_partition *info)
 		printf("<> We did NOT provide a DOS volume!\n");
 		printf("<> We provided %X %X", (unsigned char) buffer[DOS_BOOT_MAGIC_OFFSET], (unsigned char) buffer[DOS_BOOT_MAGIC_OFFSET + 1]);
 		printf("<> ABOUT TO DUMP CONTENTS OF BUFFER\n\n");
+		printf("<> NEW BOOTLOADER VERSION\n");
 		for (int i = 0; i < 550; i++) {
-			printf("%X ", buffer[i]);
+			printf("%x ", buffer[i]);
 		}
 		printf("\n\nEnd buffer print\n\n");
 		cur_dev = NULL;
