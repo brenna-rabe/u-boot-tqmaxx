@@ -75,6 +75,7 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, struct disk_partition *info)
 	/* Check if it's actually a DOS volume */
 	if (memcmp(buffer + DOS_BOOT_MAGIC_OFFSET, "\x55\xAA", 2)) {
 		printf("<> We did NOT provide a DOS volume!\n");
+		printf("<> We provided %c %c", buffer[DOS_BOOT_MAGIC], buffer[DOS_BOOT_MAGIC+1]);
 		cur_dev = NULL;
 		return -1;
 	}
