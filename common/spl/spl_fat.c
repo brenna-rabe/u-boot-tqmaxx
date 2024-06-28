@@ -22,11 +22,13 @@ static int fat_registered;
 
 static int spl_register_fat_device(struct blk_desc *block_dev, int partition)
 {
+	printf("<> Beginning function spl_register_fat_device in file common/spl/spl_fat.c\n");
 	int err = 0;
 
-	if (fat_registered)
+	if (fat_registered) {
+		printf("<> Ending function spl_register_fat_device in file common/spl/spl_fat.c - fat was already registered\n");
 		return err;
-
+	}
 	err = fat_register_device(block_dev, partition);
 	if (err) {
 #ifdef CONFIG_SPL_LIBCOMMON_SUPPORT
@@ -36,7 +38,7 @@ static int spl_register_fat_device(struct blk_desc *block_dev, int partition)
 	}
 
 	fat_registered = 1;
-
+	printf("<> Ending function spl_register_fat_device in file common/spl/spl_fat.c, returning %d\n", err);
 	return err;
 }
 
