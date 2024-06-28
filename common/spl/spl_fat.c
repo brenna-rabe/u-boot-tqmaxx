@@ -1,31 +1,34 @@
-// SPDX-License-Identifier: GPL-2.0+
 /*
  * (C) Copyright 2014
  * Texas Instruments, <www.ti.com>
  *
  * Dan Murphy <dmurphy@ti.com>
  *
+ * SPDX-License-Identifier:	GPL-2.0+
+ *
  * FAT Image Functions copied from spl_mmc.c
  */
 
 #include <common.h>
-#include <env.h>
-#include <log.h>
 #include <spl.h>
 #include <asm/u-boot.h>
 #include <fat.h>
 #include <errno.h>
 #include <image.h>
-#include <linux/libfdt.h>
+#include <libfdt.h>
 
 static int fat_registered;
 
+#ifdef CONFIG_SPL_FAT_SUPPORT
 static int spl_register_fat_device(struct blk_desc *block_dev, int partition)
 {
+	printf("Beginning spl_register_fat_device in common/spl/spl_fat.c\n");
 	int err = 0;
 
-	if (fat_registered)
+	if (fat_registered) {
+		printf("Fat is already registered, exiting spl_register_fat_device in common/spl/spl_fat.c with value %d\n", err);
 		return err;
+	}
 
 	err = fat_register_device(block_dev, partition);
 	if (err) {
@@ -37,6 +40,7 @@ static int spl_register_fat_device(struct blk_desc *block_dev, int partition)
 
 	fat_registered = 1;
 
+	printf("Ending spl_register_fat_device in common/spl/spl_fat.c with value %d\n", err);
 	return err;
 }
 
@@ -58,31 +62,22 @@ int spl_load_image_fat(struct spl_image_info *spl_image,
 		       struct blk_desc *block_dev, int partition,
 		       const char *filename)
 {
+	printf("Begin spl_load_image in common/spl/spl_fat.c\n");
 	int err;
 	struct image_header *header;
 
 	err = spl_register_fat_device(block_dev, partition);
 	if (err)
 		goto end;
-
-	header = spl_get_load_buffer(-sizeof(*header), sizeof(*header));
+	printf("Succesful register of fat device!\n");
+	header = (struct image_header *)(CONFIG_SYS_TEXT_BASE -
+						sizeof(struct image_header));
 
 	err = file_fat_read(filename, header, sizeof(struct image_header));
 	if (err <= 0)
 		goto end;
 
-	if (IS_ENABLED(CONFIG_SPL_LOAD_FIT_FULL) &&
-	    image_get_magic(header) == FDT_MAGIC) {
-		err = file_fat_read(filename, (void *)CONFIG_SYS_LOAD_ADDR, 0);
-		if (err <= 0)
-			goto end;
-		err = spl_parse_image_header(spl_image,
-				(struct image_header *)CONFIG_SYS_LOAD_ADDR);
-		if (err == -EAGAIN)
-			return err;
-		if (err == 0)
-			err = 1;
-	} else if (IS_ENABLED(CONFIG_SPL_LOAD_FIT) &&
+	if (IS_ENABLED(CONFIG_SPL_LOAD_FIT) &&
 	    image_get_magic(header) == FDT_MAGIC) {
 		struct spl_load_info load;
 
@@ -108,7 +103,7 @@ end:
 		printf("%s: error reading image %s, err - %d\n",
 		       __func__, filename, err);
 #endif
-
+	printf("End spl_load_image in common/spl/spl_fat.c with error\n");
 	return (err <= 0);
 }
 
@@ -124,7 +119,7 @@ int spl_load_image_fat_os(struct spl_image_info *spl_image,
 		return err;
 
 #if defined(CONFIG_SPL_ENV_SUPPORT) && defined(CONFIG_SPL_OS_BOOT)
-	file = env_get("falcon_args_file");
+	file = getenv("falcon_args_file");
 	if (file) {
 		err = file_fat_read(file, (void *)CONFIG_SYS_SPL_ARGS_ADDR, 0);
 		if (err <= 0) {
@@ -132,7 +127,7 @@ int spl_load_image_fat_os(struct spl_image_info *spl_image,
 			       file, err);
 			goto defaults;
 		}
-		file = env_get("falcon_image_file");
+		file = getenv("falcon_image_file");
 		if (file) {
 			err = spl_load_image_fat(spl_image, block_dev,
 						 partition, file);
@@ -169,4 +164,5 @@ int spl_load_image_fat_os(struct spl_image_info *spl_image,
 {
 	return -ENOSYS;
 }
+#endif
 #endif
