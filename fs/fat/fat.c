@@ -76,6 +76,8 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, struct disk_partition *info)
 	if (memcmp(buffer + DOS_BOOT_MAGIC_OFFSET, "\x55\xAA", 2)) {
 		printf("<> We did NOT provide a DOS volume!\n");
 		printf("<> We provided %c %c", buffer[DOS_BOOT_MAGIC_OFFSET], buffer[DOS_BOOT_MAGIC_OFFSET + 1]);
+		printf("<> ABOUT TO DUMP CONTENTS OF BUFFER\n\n");
+		printf("%s\n\n", buffer);
 		cur_dev = NULL;
 		return -1;
 	}
