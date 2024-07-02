@@ -22,11 +22,11 @@ static int fat_registered;
 
 static int spl_register_fat_device(struct blk_desc *block_dev, int partition)
 {
-	printf("<> Beginning function spl_register_fat_device in file common/spl/spl_fat.c\n");
+	// printf("<> Beginning function spl_register_fat_device in file common/spl/spl_fat.c\n");
 	int err = 0;
 
 	if (fat_registered) {
-		printf("<> Ending function spl_register_fat_device in file common/spl/spl_fat.c - fat was already registered\n");
+		// printf("<> Ending function spl_register_fat_device in file common/spl/spl_fat.c - fat was already registered\n");
 		return err;
 	}
 	err = fat_register_device(block_dev, partition);
@@ -38,7 +38,7 @@ static int spl_register_fat_device(struct blk_desc *block_dev, int partition)
 	}
 
 	fat_registered = 1;
-	printf("<> Ending function spl_register_fat_device in file common/spl/spl_fat.c, returning %d\n", err);
+	// printf("<> Ending function spl_register_fat_device in file common/spl/spl_fat.c, returning %d\n", err);
 	return err;
 }
 
