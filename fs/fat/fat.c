@@ -67,7 +67,7 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, struct disk_partition *info)
 
 	/* Make sure it has a valid FAT header */
 	if (disk_read(0, 1, buffer) != 1) {
-		printf("<> We do NOT have a valid FAT header!\n");
+		// printf("<> We do NOT have a valid FAT header!\n");
 		cur_dev = NULL;
 		return -1;
 	}
@@ -84,35 +84,35 @@ int fat_set_blk_dev(struct blk_desc *dev_desc, struct disk_partition *info)
 	// buffer[DOS_FS_TYPE_OFFSET + 4] = '2';
 
 	if (memcmp(buffer + DOS_BOOT_MAGIC_OFFSET, "\x55\xAA", 2)) {
-		printf("<> We did NOT provide a DOS volume!\n");
-		printf("<> We provided %X %X", (unsigned char) buffer[DOS_BOOT_MAGIC_OFFSET], (unsigned char) buffer[DOS_BOOT_MAGIC_OFFSET + 1]);
-		printf("<> ABOUT TO DUMP CONTENTS OF BUFFER\n\n");
-		printf("<> NEW BOOTLOADER VERSION\n");
-		for (int i = 0; i < 550; i++) {
-			printf("%x ", buffer[i]);
-		}
-		printf("\n\nEnd buffer print\n\n");
+		// printf("<> We did NOT provide a DOS volume!\n");
+		// printf("<> We provided %X %X", (unsigned char) buffer[DOS_BOOT_MAGIC_OFFSET], (unsigned char) buffer[DOS_BOOT_MAGIC_OFFSET + 1]);
+		// printf("<> ABOUT TO DUMP CONTENTS OF BUFFER\n\n");
+		// printf("<> NEW BOOTLOADER VERSION\n");
+		// for (int i = 0; i < 550; i++) {
+		// 	printf("%x ", buffer[i]);
+		// }
+		// printf("\n\nEnd buffer print\n\n");
 		cur_dev = NULL;
 		return -1;
 	}
 
 	/* Check for FAT12/FAT16/FAT32 filesystem */
 	if (!memcmp(buffer + DOS_FS_TYPE_OFFSET, "FAT", 3)) {
-		printf("<> We provided a FAT filesystem!\n");
+		// printf("<> We provided a FAT filesystem!\n");
 		return 0;
 	}
 	if (!memcmp(buffer + DOS_FS32_TYPE_OFFSET, "FAT32", 5)) {
-		printf("<> We provided a FAT filesystem!\n");
+		// printf("<> We provided a FAT filesystem!\n");
 		return 0;
 	}
-	printf("<> We provided a valid fat header and dos volume but NOT a FAT12/16/32 FS!\n");
+	// printf("<> We provided a valid fat header and dos volume but NOT a FAT12/16/32 FS!\n");
 	cur_dev = NULL;
 	return -1;
 }
 
 int fat_register_device(struct blk_desc *dev_desc, int part_no)
 {
-	printf("<> Beginning function fat_register_device in file fs/fat/fat.c\n");
+	// printf("<> Beginning function fat_register_device in file fs/fat/fat.c\n");
 	struct disk_partition info;
 
 	/* First close any currently found FAT filesystem */
@@ -120,7 +120,7 @@ int fat_register_device(struct blk_desc *dev_desc, int part_no)
 
 	/* Read the partition table, if present */
 	if (part_get_info(dev_desc, part_no, &info)) {
-		printf("<> A partition table is present in (function spl_register_fat_device in file common/spl/spl_fat.c)\n");
+		// printf("<> A partition table is present in (function spl_register_fat_device in file common/spl/spl_fat.c)\n");
 		if (part_no != 0) {
 			printf("** Partition %d not valid on device %d **\n",
 					part_no, dev_desc->devnum);
@@ -132,12 +132,12 @@ int fat_register_device(struct blk_desc *dev_desc, int part_no)
 		info.name[0] = 0;
 		info.type[0] = 0;
 		info.bootable = 0;
-		printf("<> disk partition size in number of blocks is %lu\n", info.size);
+		// printf("<> disk partition size in number of blocks is %lu\n", info.size);
 #if CONFIG_IS_ENABLED(PARTITION_UUIDS)
 		info.uuid[0] = 0;
 #endif
 	}
-	printf("<> Ending function fat_register_device in file fs/fat/fat.c, calling fat_set_blk_dev\n");
+	// printf("<> Ending function fat_register_device in file fs/fat/fat.c, calling fat_set_blk_dev\n");
 	return fat_set_blk_dev(dev_desc, &info);
 }
 
