@@ -521,10 +521,10 @@ static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 	struct spl_image_loader *entry;
 
 	printf("Boot device is: %u\n", boot_device);
-	printf("Boot device is: %s\n", drv->name);
 	for (entry = drv; entry != drv + n_ents; entry++) {
+		printf("entry->boot_device is %u\n", entry->boot_device);
 		if (boot_device == entry->boot_device){
-			printf("entry->boot_device is %u\n", entry->boot_device);
+			printf("boot_device = entry->boot_device\n");
 			return entry;
 		}
 	}
