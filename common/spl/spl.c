@@ -511,18 +511,21 @@ __weak void board_boot_order(u32 *spl_boot_list)
 
 static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 {
-	printf("function spl_image_loader file spl.c\n");
+	printf("function spl_ll_find_loader file spl.c\n");
 	struct spl_image_loader *drv =
 		ll_entry_start(struct spl_image_loader, spl_image_loader);
 	const int n_ents =
 		ll_entry_count(struct spl_image_loader, spl_image_loader);
 	struct spl_image_loader *entry;
 
+	printf("Boot device is: %u\n", boot_device);
 	for (entry = drv; entry != drv + n_ents; entry++) {
-		if (boot_device == entry->boot_device)
+		if (boot_device == entry->boot_device){
+			printf("entry->boot_device is %u\n", entry->boot_device);
 			return entry;
+		}
 	}
-	printf("returning NULL - not found from spl_image_loader\n");
+	printf("returning NULL - not found from spl_ll_find_loader\n");
 	/* Not found */
 	return NULL;
 }
