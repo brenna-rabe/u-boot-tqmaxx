@@ -195,6 +195,7 @@ void spl_set_header_raw_uboot(struct spl_image_info *spl_image)
 static int spl_load_fit_image(struct spl_image_info *spl_image,
 			      const struct image_header *header)
 {
+	printf("function spl_load_fit_image file spl.c\n");
 	bootm_headers_t images;
 	const char *fit_uname_config = NULL;
 	const char *fit_uname_fdt = FIT_FDT_PROP;
@@ -271,6 +272,7 @@ __weak int spl_parse_legacy_header(struct spl_image_info *spl_image,
 int spl_parse_image_header(struct spl_image_info *spl_image,
 			   const struct image_header *header)
 {
+	printf("function spl_parse_image_header file spl.c\n");
 #ifdef CONFIG_SPL_LOAD_FIT_FULL
 	int ret = spl_load_fit_image(spl_image, header);
 
@@ -384,6 +386,7 @@ static inline int write_spl_handoff(void) { return 0; }
 
 static int spl_common_init(bool setup_malloc)
 {
+	printf("function spl_common_init file spl.c\n");
 	int ret;
 
 #if CONFIG_VAL(SYS_MALLOC_F_LEN)
@@ -469,6 +472,7 @@ int spl_early_init(void)
 
 int spl_init(void)
 {
+	printf("function spl_init file spl.c\n");
 	int ret;
 	bool setup_malloc = !(IS_ENABLED(CONFIG_SPL_STACK_R) &&
 			IS_ENABLED(CONFIG_SPL_SYS_MALLOC_SIMPLE));
@@ -496,6 +500,7 @@ __weak void board_boot_order(u32 *spl_boot_list)
 
 static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 {
+	printf("function spl_image_loader file spl.c\n");
 	struct spl_image_loader *drv =
 		ll_entry_start(struct spl_image_loader, spl_image_loader);
 	const int n_ents =
@@ -514,6 +519,7 @@ static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 static int spl_load_image(struct spl_image_info *spl_image,
 			  struct spl_image_loader *loader)
 {
+	printf("function spl_load_image file spl.c\n");
 	int ret;
 	struct spl_boot_device bootdev;
 
@@ -588,6 +594,7 @@ void board_init_f(ulong dummy)
 
 void board_init_r(gd_t *dummy1, ulong dummy2)
 {
+	printf("function board_init_r spl.c\n");
 	u32 spl_boot_list[] = {
 		BOOT_DEVICE_NONE,
 		BOOT_DEVICE_NONE,
