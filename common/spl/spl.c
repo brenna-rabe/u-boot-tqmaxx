@@ -585,7 +585,6 @@ static int boot_from_devices(struct spl_image_info *spl_image,
 		else
 			puts(SPL_TPL_PROMPT "Unsupported Boot Device ahhhhhh!\n");
 #endif
-		printf("About to try out this if statement in boot_from_devices\n");
 		if (loader && !spl_load_image(spl_image, loader)) {
 			printf("End function boot_from_devices, returning 0\n");
 			spl_image->boot_device = spl_boot_list[i];
