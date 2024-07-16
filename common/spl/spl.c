@@ -448,12 +448,19 @@ static int spl_common_init(bool setup_malloc)
 
 void spl_set_bd(void)
 {
+	printf("Enter function spl_set_bd\n");
 	/*
 	 * NOTE: On some platforms (e.g. x86) bdata may be in flash and not
 	 * writeable.
 	 */
-	if (!gd->bd)
+	if (!gd->bd) {
+		printf("!gd->bd is true\n);
 		gd->bd = &bdata;
+	}
+	else {
+		printf("!gd->bd is false\n);
+	}
+	printf("Exit function spl_set_bd\n");
 }
 
 int spl_early_init(void)
@@ -480,12 +487,16 @@ int spl_init(void)
 	debug("%s\n", __func__);
 
 	if (!(gd->flags & GD_FLG_SPL_EARLY_INIT)) {
+		printf("GD_FLG_SPL_EARLY_INIT\n");
 		ret = spl_common_init(setup_malloc);
-		if (ret)
+		if (ret) {
+			printf("non-zero ret value in spl_init\n");
 			return ret;
+		}
 	}
 	gd->flags |= GD_FLG_SPL_INIT;
 
+	printf("returning 0 from spl_init\n");
 	return 0;
 }
 
@@ -511,7 +522,7 @@ static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 		if (boot_device == entry->boot_device)
 			return entry;
 	}
-
+	printf("returning NULL - not found from spl_image_loader\n");
 	/* Not found */
 	return NULL;
 }
@@ -610,22 +621,28 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	spl_set_bd();
 
 #if defined(CONFIG_SYS_SPL_MALLOC_START)
+	printf("CONFIG_SYS_SPL_MALLOC_START is defined\n");
 	mem_malloc_init(CONFIG_SYS_SPL_MALLOC_START,
 			CONFIG_SYS_SPL_MALLOC_SIZE);
 	gd->flags |= GD_FLG_FULL_MALLOC_INIT;
 #endif
 	if (!(gd->flags & GD_FLG_SPL_INIT)) {
-		if (spl_init())
+		printf("-not- gd->flags & GD_FLG_SPL_INIT\n");
+		if (spl_init()) {
+			printf("spl_init returns non-zero value\n");
 			hang();
+		}
 	}
 #if !defined(CONFIG_PPC) && !defined(CONFIG_ARCH_MX6)
 	/*
 	 * timer_init() does not exist on PPC systems. The timer is initialized
 	 * and enabled (decrementer) in interrupt_init() here.
 	 */
+	printf("timer init about to occur\n");
 	timer_init();
 #endif
 	if (CONFIG_IS_ENABLED(BLOBLIST)) {
+		printf("Bloblist is enabled\n");
 		ret = bloblist_init();
 		if (ret) {
 			debug("%s: Failed to set up bloblist: ret=%d\n",
@@ -635,6 +652,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 		}
 	}
 	if (CONFIG_IS_ENABLED(HANDOFF)) {
+		printf("handoff is enabled\n");
 		int ret;
 
 		ret = setup_spl_handoff();
@@ -645,6 +663,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	}
 
 #if CONFIG_IS_ENABLED(BOARD_INIT)
+	printf("board_init is enabled - calling spl_board_init\n");
 	spl_board_init();
 #endif
 
@@ -653,8 +672,10 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 #endif
 
 	if (IS_ENABLED(CONFIG_SPL_OS_BOOT) || CONFIG_IS_ENABLED(HANDOFF) ||
-	    IS_ENABLED(CONFIG_SPL_ATF))
+	    IS_ENABLED(CONFIG_SPL_ATF)) {
+		printf("initializing dram\n");
 		dram_init_banksize();
+	}
 
 	bootcount_inc();
 
@@ -740,6 +761,8 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	debug("loaded - jumping to U-Boot...\n");
 	spl_board_prepare_for_boot();
 	jump_to_image_no_args(&spl_image);
+
+	printf("end board_init_r\n");
 }
 
 /*
