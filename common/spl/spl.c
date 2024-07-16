@@ -454,11 +454,11 @@ void spl_set_bd(void)
 	 * writeable.
 	 */
 	if (!gd->bd) {
-		printf("!gd->bd is true\n);
+		printf("!gd->bd is true\n");
 		gd->bd = &bdata;
 	}
 	else {
-		printf("!gd->bd is false\n);
+		printf("!gd->bd is false\n");
 	}
 	printf("Exit function spl_set_bd\n");
 }
