@@ -572,16 +572,18 @@ static int boot_from_devices(struct spl_image_info *spl_image,
 
 	for (i = 0; i < count && spl_boot_list[i] != BOOT_DEVICE_NONE; i++) {
 		struct spl_image_loader *loader;
-
+		printf("Boot list item %d is %u\n", i, spl_boot_list[i]);
 		loader = spl_ll_find_loader(spl_boot_list[i]);
 #if defined(CONFIG_SPL_SERIAL_SUPPORT) \
     && defined(CONFIG_SPL_LIBCOMMON_SUPPORT)    \
     && !defined(CONFIG_SILENT_CONSOLE)
+		printf("serial, libcommon supported\n");
 		if (loader)
 			printf("Trying to boot from %s\n", loader->name);
 		else
-			puts(SPL_TPL_PROMPT "Unsupported Boot Device!\n");
+			puts(SPL_TPL_PROMPT "Unsupported Boot Device ahhhhhh!\n");
 #endif
+		printf("About to try out this if statement in boot_from_devices\n");
 		if (loader && !spl_load_image(spl_image, loader)) {
 			printf("End function boot_from_devices, returning 0\n");
 			spl_image->boot_device = spl_boot_list[i];
