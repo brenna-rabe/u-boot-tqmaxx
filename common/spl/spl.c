@@ -667,7 +667,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 
 	if (boot_from_devices(&spl_image, spl_boot_list,
 			      ARRAY_SIZE(spl_boot_list))) {
-		puts(SPL_TPL_PROMPT "failed to boot from all boot devices\n");
+		puts(SPL_TPL_PROMPT "!!!SPL: FAILED TO BOOT FROM ALL BOOT DEVICES :o\n");
 		hang();
 	}
 
