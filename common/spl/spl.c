@@ -427,7 +427,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 
 	if (i == ARRAY_SIZE(spl_boot_list) ||
 	    spl_boot_list[i] == BOOT_DEVICE_NONE) {
-		puts("SPL: failed to boot from all boot devices\n");
+		puts("SPL: FaiLeD tO bOoT fRoM aLl BoOt DeViCeS :o\n");
 		hang();
 	}
 
