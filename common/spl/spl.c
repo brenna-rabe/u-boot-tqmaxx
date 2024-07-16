@@ -567,6 +567,7 @@ static int spl_load_image(struct spl_image_info *spl_image,
 static int boot_from_devices(struct spl_image_info *spl_image,
 			     u32 spl_boot_list[], int count)
 {
+	printf("Begin function boot_from_devices\n");
 	int i;
 
 	for (i = 0; i < count && spl_boot_list[i] != BOOT_DEVICE_NONE; i++) {
@@ -582,11 +583,12 @@ static int boot_from_devices(struct spl_image_info *spl_image,
 			puts(SPL_TPL_PROMPT "Unsupported Boot Device!\n");
 #endif
 		if (loader && !spl_load_image(spl_image, loader)) {
+			printf("End function boot_from_devices, returning 0\n");
 			spl_image->boot_device = spl_boot_list[i];
 			return 0;
 		}
 	}
-
+	printf("End function boot_from_devices, returning error\n");
 	return -ENODEV;
 }
 
@@ -672,6 +674,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 #endif
 
 #if defined(CONFIG_SPL_WATCHDOG_SUPPORT) && CONFIG_IS_ENABLED(WDT)
+	printf("initializing watchdog\n");
 	initr_watchdog();
 #endif
 
@@ -683,6 +686,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 
 	bootcount_inc();
 
+	printf("spl_image size is %d\n", sizeof(spl_image));
 	memset(&spl_image, '\0', sizeof(spl_image));
 #ifdef CONFIG_SYS_SPL_ARGS_ADDR
 	spl_image.arg = (void *)CONFIG_SYS_SPL_ARGS_ADDR;
