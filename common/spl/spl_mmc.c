@@ -118,6 +118,7 @@ end:
 
 static int spl_mmc_get_device_index(u32 boot_device)
 {
+	printf("In spl_mmc_get_device_index file spl_mmc\n");
 	switch (boot_device) {
 	case BOOT_DEVICE_MMC1:
 		return 0;
@@ -135,6 +136,7 @@ static int spl_mmc_get_device_index(u32 boot_device)
 
 static int spl_mmc_find_device(struct mmc **mmcp, u32 boot_device)
 {
+	printf("In spl_mmc_find_device file spl_mmc\n");
 	int err, mmc_dev;
 
 	mmc_dev = spl_mmc_get_device_index(boot_device);
@@ -208,6 +210,7 @@ static int mmc_load_image_raw_partition(struct spl_image_info *spl_image,
 static int mmc_load_image_raw_os(struct spl_image_info *spl_image,
 				 struct mmc *mmc)
 {
+	printf("In spl_mmc_load_image_raw_os file spl_mmc\n");
 	int ret;
 
 #if defined(CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTOR)
@@ -253,6 +256,7 @@ static int mmc_load_image_raw_os(struct spl_image_info *spl_image,
 static int spl_mmc_do_fs_boot(struct spl_image_info *spl_image, struct mmc *mmc,
 			      const char *filename)
 {
+	printf("In spl_mmc_do_fs_boot file spl_mmc\n");
 	int err = -ENOSYS;
 
 #ifdef CONFIG_SPL_FS_FAT
@@ -330,6 +334,7 @@ int spl_mmc_load(struct spl_image_info *spl_image,
 		 int raw_part,
 		 unsigned long raw_sect)
 {
+	printf("In spl_mmc_load file spl_mmc\n");
 	static struct mmc *mmc;
 	u32 boot_mode;
 	int err = 0;
