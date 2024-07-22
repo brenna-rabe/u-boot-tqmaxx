@@ -195,7 +195,6 @@ void spl_set_header_raw_uboot(struct spl_image_info *spl_image)
 static int spl_load_fit_image(struct spl_image_info *spl_image,
 			      const struct image_header *header)
 {
-	printf("function spl_load_fit_image file spl.c\n");
 	bootm_headers_t images;
 	const char *fit_uname_config = NULL;
 	const char *fit_uname_fdt = FIT_FDT_PROP;
@@ -272,7 +271,6 @@ __weak int spl_parse_legacy_header(struct spl_image_info *spl_image,
 int spl_parse_image_header(struct spl_image_info *spl_image,
 			   const struct image_header *header)
 {
-	printf("function spl_parse_image_header file spl.c\n");
 #ifdef CONFIG_SPL_LOAD_FIT_FULL
 	int ret = spl_load_fit_image(spl_image, header);
 
@@ -386,7 +384,6 @@ static inline int write_spl_handoff(void) { return 0; }
 
 static int spl_common_init(bool setup_malloc)
 {
-	printf("function spl_common_init file spl.c\n");
 	int ret;
 
 #if CONFIG_VAL(SYS_MALLOC_F_LEN)
@@ -448,19 +445,12 @@ static int spl_common_init(bool setup_malloc)
 
 void spl_set_bd(void)
 {
-	printf("Enter function spl_set_bd\n");
 	/*
 	 * NOTE: On some platforms (e.g. x86) bdata may be in flash and not
 	 * writeable.
 	 */
-	if (!gd->bd) {
-		printf("!gd->bd is true\n");
+	if (!gd->bd)
 		gd->bd = &bdata;
-	}
-	else {
-		printf("!gd->bd is false\n");
-	}
-	printf("Exit function spl_set_bd\n");
 }
 
 int spl_early_init(void)
@@ -479,7 +469,6 @@ int spl_early_init(void)
 
 int spl_init(void)
 {
-	printf("function spl_init file spl.c\n");
 	int ret;
 	bool setup_malloc = !(IS_ENABLED(CONFIG_SPL_STACK_R) &&
 			IS_ENABLED(CONFIG_SPL_SYS_MALLOC_SIMPLE));
@@ -487,16 +476,12 @@ int spl_init(void)
 	debug("%s\n", __func__);
 
 	if (!(gd->flags & GD_FLG_SPL_EARLY_INIT)) {
-		printf("GD_FLG_SPL_EARLY_INIT\n");
 		ret = spl_common_init(setup_malloc);
-		if (ret) {
-			printf("non-zero ret value in spl_init\n");
+		if (ret)
 			return ret;
-		}
 	}
 	gd->flags |= GD_FLG_SPL_INIT;
 
-	printf("returning 0 from spl_init\n");
 	return 0;
 }
 
@@ -506,29 +491,22 @@ int spl_init(void)
 
 __weak void board_boot_order(u32 *spl_boot_list)
 {
-	//spl_boot_list[0] = spl_boot_device();
-	spl_boot_list[0] = 7;
-	printf("spl_boot_list 0 is %u\n", spl_boot_list[0]);
+	spl_boot_list[0] = spl_boot_device();
 }
 
 static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 {
-	printf("function spl_ll_find_loader file spl.c\n");
 	struct spl_image_loader *drv =
 		ll_entry_start(struct spl_image_loader, spl_image_loader);
 	const int n_ents =
 		ll_entry_count(struct spl_image_loader, spl_image_loader);
 	struct spl_image_loader *entry;
 
-	printf("Boot device is: %u\n", boot_device);
 	for (entry = drv; entry != drv + n_ents; entry++) {
-		printf("entry->boot_device is %u\n", entry->boot_device);
-		if (boot_device == entry->boot_device){
-			printf("boot_device = entry->boot_device\n");
+		if (boot_device == entry->boot_device)
 			return entry;
-		}
 	}
-	printf("returning NULL - not found from spl_ll_find_loader\n");
+
 	/* Not found */
 	return NULL;
 }
@@ -536,7 +514,6 @@ static struct spl_image_loader *spl_ll_find_loader(uint boot_device)
 static int spl_load_image(struct spl_image_info *spl_image,
 			  struct spl_image_loader *loader)
 {
-	printf("function spl_load_image file spl.c\n");
 	int ret;
 	struct spl_boot_device bootdev;
 
@@ -569,29 +546,26 @@ static int spl_load_image(struct spl_image_info *spl_image,
 static int boot_from_devices(struct spl_image_info *spl_image,
 			     u32 spl_boot_list[], int count)
 {
-	printf("Begin function boot_from_devices\n");
 	int i;
 
 	for (i = 0; i < count && spl_boot_list[i] != BOOT_DEVICE_NONE; i++) {
 		struct spl_image_loader *loader;
-		printf("Boot list item %d is %u\n", i, spl_boot_list[i]);
+
 		loader = spl_ll_find_loader(spl_boot_list[i]);
 #if defined(CONFIG_SPL_SERIAL_SUPPORT) \
     && defined(CONFIG_SPL_LIBCOMMON_SUPPORT)    \
     && !defined(CONFIG_SILENT_CONSOLE)
-		printf("serial, libcommon supported\n");
 		if (loader)
 			printf("Trying to boot from %s\n", loader->name);
 		else
-			puts(SPL_TPL_PROMPT "Unsupported Boot Device ahhhhhh!\n");
+			puts(SPL_TPL_PROMPT "Unsupported Boot Device!\n");
 #endif
 		if (loader && !spl_load_image(spl_image, loader)) {
-			printf("End function boot_from_devices, returning 0\n");
 			spl_image->boot_device = spl_boot_list[i];
 			return 0;
 		}
 	}
-	printf("End function boot_from_devices, returning error\n");
+
 	return -ENODEV;
 }
 
@@ -614,7 +588,6 @@ void board_init_f(ulong dummy)
 
 void board_init_r(gd_t *dummy1, ulong dummy2)
 {
-	printf("function board_init_r spl.c\n");
 	u32 spl_boot_list[] = {
 		BOOT_DEVICE_NONE,
 		BOOT_DEVICE_NONE,
@@ -630,28 +603,22 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	spl_set_bd();
 
 #if defined(CONFIG_SYS_SPL_MALLOC_START)
-	printf("CONFIG_SYS_SPL_MALLOC_START is defined\n");
 	mem_malloc_init(CONFIG_SYS_SPL_MALLOC_START,
 			CONFIG_SYS_SPL_MALLOC_SIZE);
 	gd->flags |= GD_FLG_FULL_MALLOC_INIT;
 #endif
 	if (!(gd->flags & GD_FLG_SPL_INIT)) {
-		printf("-not- gd->flags & GD_FLG_SPL_INIT\n");
-		if (spl_init()) {
-			printf("spl_init returns non-zero value\n");
+		if (spl_init())
 			hang();
-		}
 	}
 #if !defined(CONFIG_PPC) && !defined(CONFIG_ARCH_MX6)
 	/*
 	 * timer_init() does not exist on PPC systems. The timer is initialized
 	 * and enabled (decrementer) in interrupt_init() here.
 	 */
-	printf("timer init about to occur\n");
 	timer_init();
 #endif
 	if (CONFIG_IS_ENABLED(BLOBLIST)) {
-		printf("Bloblist is enabled\n");
 		ret = bloblist_init();
 		if (ret) {
 			debug("%s: Failed to set up bloblist: ret=%d\n",
@@ -661,7 +628,6 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 		}
 	}
 	if (CONFIG_IS_ENABLED(HANDOFF)) {
-		printf("handoff is enabled\n");
 		int ret;
 
 		ret = setup_spl_handoff();
@@ -672,24 +638,19 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	}
 
 #if CONFIG_IS_ENABLED(BOARD_INIT)
-	printf("board_init is enabled - calling spl_board_init\n");
 	spl_board_init();
 #endif
 
 #if defined(CONFIG_SPL_WATCHDOG_SUPPORT) && CONFIG_IS_ENABLED(WDT)
-	printf("initializing watchdog\n");
 	initr_watchdog();
 #endif
 
 	if (IS_ENABLED(CONFIG_SPL_OS_BOOT) || CONFIG_IS_ENABLED(HANDOFF) ||
-	    IS_ENABLED(CONFIG_SPL_ATF)) {
-		printf("initializing dram\n");
+	    IS_ENABLED(CONFIG_SPL_ATF))
 		dram_init_banksize();
-	}
 
 	bootcount_inc();
 
-	printf("spl_image size is %d\n", sizeof(spl_image));
 	memset(&spl_image, '\0', sizeof(spl_image));
 #ifdef CONFIG_SYS_SPL_ARGS_ADDR
 	spl_image.arg = (void *)CONFIG_SYS_SPL_ARGS_ADDR;
@@ -699,7 +660,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 
 	if (boot_from_devices(&spl_image, spl_boot_list,
 			      ARRAY_SIZE(spl_boot_list))) {
-		puts(SPL_TPL_PROMPT "!!!SPL: FAILED TO BOOT FROM ALL BOOT DEVICES :o\n");
+		puts(SPL_TPL_PROMPT "failed to boot from all boot devices\n");
 		hang();
 	}
 
@@ -772,8 +733,6 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	debug("loaded - jumping to U-Boot...\n");
 	spl_board_prepare_for_boot();
 	jump_to_image_no_args(&spl_image);
-
-	printf("end board_init_r\n");
 }
 
 /*
