@@ -13,7 +13,7 @@
 	"args_board=setenv bootargs ${bootargs} " \
 		"earlycon=ns16550a,mmio32,0x02800000 " \
 		"console=ttyS2,115200n8\0" \
-	"name_overlay=\0" \
+	"name_overlay=ahhhh.dtbo\0" \
 	""
 
 #include "tqma64xxl.h"
