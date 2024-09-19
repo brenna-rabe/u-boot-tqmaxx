@@ -25,6 +25,7 @@ static ulong reset_period = 1000;
 
 int initr_watchdog(void)
 {
+	printf("in initr_watchdog\n");
 	u32 timeout = WATCHDOG_TIMEOUT_SECS;
 
 	/*
