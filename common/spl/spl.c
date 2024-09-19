@@ -642,6 +642,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 #endif
 
 #if defined(CONFIG_SPL_WATCHDOG_SUPPORT) && CONFIG_IS_ENABLED(WDT)
+	printf("config_spl_watchdog_support is defined and wdt is enabled\n");
 	initr_watchdog();
 #endif
 
