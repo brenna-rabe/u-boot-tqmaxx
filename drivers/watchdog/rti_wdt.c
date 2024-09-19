@@ -44,6 +44,7 @@ struct rti_wdt_priv {
 
 static int rti_wdt_start(struct udevice *dev, u64 timeout_ms, ulong flags)
 {
+	printf("in rti_wdt_start\n");
 	struct rti_wdt_priv *priv = dev_get_priv(dev);
 	u32 timer_margin;
 	int ret;
