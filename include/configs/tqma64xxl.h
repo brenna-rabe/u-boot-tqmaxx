@@ -72,6 +72,14 @@
 	"args_extra=true\0" \
 	"run_kern=booti ${loadaddr} ${ramdisk_addr} ${fdt_addr}\0" \
 	"wdt_start=wdt dev watchdog@e000000; wdt start 60000\0" \
+	"reset_src_register=0x43018178\0" \
+	"clear_reset_src=mw.l 0x04518178 0xc3313115\0" \
+	"get_reset_src=if itest.l *${reset_src_register} == 0xc0000000; then setenv reset_src "watchdog"; else setenv reset_src "other"; fi; run clear_reset_src\0" \
+	"bootretry=0\0" \
+	"new_img=none\0" \
+	"bootretry_inc=setexpr bootretry ${bootretry} + 1\0" \
+	"reset_src_actions=if itest.s ${reset_src} -eq watchdog; then run bootretry_inc; if itest.b ${bootretry} > 1; then setenv bootretry 0; run rollback; else saveenv; fi; fi\0" \
+	"rollback=if itest.s ${new_img} -eq A; then setenv rootpart 3; setenv bootpart 3; else if itest.s ${new_img} -eq B; then setenv rootpart 2; setenv bootpart 2; fi; fi; if itest.s ${new_img} -ne none; then setenv new_img none; saveenv; fi\0" \
 	""
 
 /* U-Boot MMC-specific configuration */
