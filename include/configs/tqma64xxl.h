@@ -71,7 +71,7 @@
 	"args_reset=setenv bootargs ''\0" \
 	"args_extra=true\0" \
 	"run_kern=booti ${loadaddr} ${ramdisk_addr} ${fdt_addr}\0" \
-	"start_wdt=wdt dev watchdog@e000000; wdt start 60000;\0" \
+	"wdt_start=wdt dev watchdog@e000000; wdt start 60000\0" \
 	""
 
 /* U-Boot MMC-specific configuration */
