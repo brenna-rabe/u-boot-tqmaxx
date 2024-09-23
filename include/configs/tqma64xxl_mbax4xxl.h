@@ -14,7 +14,9 @@
 		"earlycon=ns16550a,mmio32,0x02800000 " \
 		"console=ttyS2,115200n8\0" \
 	""
-
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	"an_extra_env_item=item\0"
+	""
 #include "tqma64xxl.h"
 
 #endif /* __CONFIG_TQMA64XXL_MBAX4XXL_H */
