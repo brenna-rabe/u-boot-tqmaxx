@@ -74,7 +74,7 @@
 	"wdt_start=wdt dev watchdog@e000000; wdt start 60000\0" \
 	"reset_src_register=0x43018178\0" \
 	"clear_reset_src=mw.l 0x04518178 0xc3313115\0" \
-	"get_reset_src=if itest.l *${reset_src_register} == 0xc0000000; then setenv reset_src "watchdog"; else setenv reset_src "other"; fi; run clear_reset_src\0" \
+	"get_reset_src=if itest.l *${reset_src_register} == 0xc0000000; then setenv reset_src watchdog; else setenv reset_src other; fi; run clear_reset_src\0" \
 	"bootretry=0\0" \
 	"new_img=none\0" \
 	"bootretry_inc=setexpr bootretry ${bootretry} + 1\0" \
