@@ -79,7 +79,7 @@
 	"new_img=none\0" \
 	"bootretry_inc=setexpr bootretry ${bootretry} + 1\0" \
 	"reset_src_actions=if itest.s ${reset_src} -eq watchdog; then run bootretry_inc; if itest.b ${bootretry} > 1; then setenv bootretry 0; run rollback; else saveenv; fi; fi\0" \
-	"rollback=if itest.s ${new_img} -eq A; then setenv rootpart 3; setenv bootpart 3; else if itest.s ${new_img} -eq B; then setenv rootpart 2; setenv bootpart 2; fi; fi; if itest.s ${new_img} -ne none; then setenv new_img none; saveenv; fi\0" \
+	"rollback=if itest.b ${new_img} == 2; then setenv rootpart 3; setenv bootpart 3; else if itest.b ${new_img} == 3; then setenv rootpart 2; setenv bootpart 2; fi; fi; if itest.s ${new_img} -ne none; then setenv new_img none; saveenv; fi\0" \
 	""
 
 /* U-Boot MMC-specific configuration */
